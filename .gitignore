@@ -5,3 +5,5 @@ import-summary.txt
 local.properties
 build/
 app/build/
+.idea/
+.gradle/
