@@ -43,8 +43,6 @@ public class Lolteroids extends Activity {
 	public Display display;
 	public float currentRot=0.0f;
 	
-	InterstitialAd ia;
-	
 	public static final String INTERSTITIAL="<key>", BANNER="";
 	
 	AlphaAnimation anim = new AlphaAnimation(1.0f, 0.0f);
@@ -62,30 +60,11 @@ public class Lolteroids extends Activity {
 		display = new Display(this,this,dm.widthPixels,dm.heightPixels);
 		setContentView(R.layout.activity_lolteroids);
 
-		ia = new InterstitialAd(this);
-		ia.setAdUnitId(INTERSTITIAL);
-		ia.setAdListener(al);
-		AdRequest ar = new AdRequest.Builder()
-		.addKeyword("doge").addKeyword("awesome").addKeyword("meme").addKeyword("lol")
-		.addKeyword("fun").addKeyword("funny").addKeyword("retro").addKeyword("gaming")
-		.addKeyword("asteroids").addKeyword("nintendo").addKeyword("nes").addKeyword("atari")
-		.addKeyword("amiga").addKeyword("zx").addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build();
-		ia.loadAd(ar);
 		new Thread(new Runnable() {public void run() {display.loadImages();}}).start();
 		new DataLoader().execute();
 		game = new GameDerp(this);
 		game.start();
 	}
-
-	public AdListener al = new AdListener() {
-
-		public void onAdLoaded() {
-			super.onAdLoaded();
-			ia.show();
-		}
-	};
-	
-	private boolean adReady=false;
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -103,11 +82,6 @@ public class Lolteroids extends Activity {
 						if(game.paused || game.gameover) {
 							currentScreen=SCREEN_MENU; setContentView(R.layout.menu_layout);
 
-							AdRequest ar = new AdRequest.Builder()
-								.addKeyword("doge").addKeyword("awesome").addKeyword("meme").addKeyword("lol").addKeyword("fun").addKeyword("funny").addKeyword("retro").addKeyword("gaming").addKeyword("asteroids").addKeyword("nintendo").addKeyword("nes").addKeyword("atari").addKeyword("amiga").addKeyword("zx")
-									.addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build();
-							AdView adv = (AdView) findViewById(R.id.adView);
-							adv.loadAd(ar);
 							ImageView iv = (ImageView) findViewById(R.id.imageView1);	iv.startAnimation(anim);
 							TextView tv = (TextView) findViewById(R.id.textView1); tv.setTypeface(hs); tv.setText("HI-SCORE: "+game.hiScore);
 							}
@@ -150,13 +124,6 @@ public class Lolteroids extends Activity {
 					} else if(game.gameover){
 						currentScreen=SCREEN_MENU;
 						setContentView(R.layout.menu_layout);
-						AdRequest ar = new AdRequest.Builder()
-						.addKeyword("doge").addKeyword("awesome").addKeyword("meme").addKeyword("lol")
-						.addKeyword("fun").addKeyword("funny").addKeyword("retro").addKeyword("gaming")
-						.addKeyword("asteroids").addKeyword("nintendo").addKeyword("nes").addKeyword("atari")
-						.addKeyword("amiga").addKeyword("zx").addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build();
-						AdView adv = (AdView) findViewById(R.id.adView);
-						adv.loadAd(ar);
 						ImageView iv = (ImageView) findViewById(R.id.imageView1);
 						iv.startAnimation(anim);
 						TextView tv = (TextView) findViewById(R.id.textView1);
@@ -226,13 +193,6 @@ public class Lolteroids extends Activity {
 		public void handleMessage(Message msg) {
 			display.start();
 			setContentView(R.layout.menu_layout);
-			AdRequest ar = new AdRequest.Builder()
-					.addKeyword("doge").addKeyword("awesome").addKeyword("meme").addKeyword("lol")
-					.addKeyword("fun").addKeyword("funny").addKeyword("retro").addKeyword("gaming")
-					.addKeyword("asteroids").addKeyword("nintendo").addKeyword("nes").addKeyword("atari")
-					.addKeyword("amiga").addKeyword("zx").addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build();
-			AdView adv = (AdView) findViewById(R.id.adView);
-			adv.loadAd(ar);
 			ImageView iv = (ImageView) findViewById(R.id.imageView1);
 			anim.setDuration(750);
 			anim.setStartOffset(20);
@@ -254,7 +214,6 @@ public class Lolteroids extends Activity {
 			hs = Typeface.createFromAsset(getAssets(), "fonts/lolteroids.ttf");
 			while(!AudioDerp.loaded) {try{Thread.sleep(100);}catch(Exception e) {}}
 			int q=0;
-			while(!adReady && q<100) {try{Thread.sleep(100); q++;}catch(Exception e){}}
 			return null;
 		}
 		
